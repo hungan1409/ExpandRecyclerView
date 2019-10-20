@@ -239,7 +239,7 @@ jobs:
           command: mkdir firebase
       - run:
           name: Download instrumented test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
+          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-skq6wiu5k559i-kqzuii6u4r2ii | tail -1`*" /root/workspace/firebase/
       - *persist_firebase_workspace
       - store_artifacts:
           path: firebase/
@@ -266,7 +266,7 @@ jobs:
           command: mkdir firebase
       - run:
           name: Download robo test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
+          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-skq6wiu5k559i-kqzuii6u4r2ii | tail -1`*" /root/workspace/firebase/
       - *persist_firebase_workspace
       - store_artifacts:
           path: firebase/
