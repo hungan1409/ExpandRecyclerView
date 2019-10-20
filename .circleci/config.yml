@@ -125,7 +125,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *save_cache
       - *export_gservices_key
       - *decode_gservices_key
@@ -145,7 +147,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *save_cache
       - *export_android_key
       - *decode_android_key
@@ -172,7 +176,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *save_cache
       - *export_gservices_key
       - *decode_gservices_key
@@ -195,7 +201,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *save_cache
       - *export_gservices_key
       - *decode_gservices_key
@@ -272,7 +280,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *attach_debug_workspace
       - *attach_firebase_workspace
       - run:
@@ -302,7 +312,9 @@ jobs:
       - *restore_cache
       - run:
           name: Download dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            sudo chmod +x ./gradlew
+            ./gradlew androidDependencies
       - *export_fabric_key
       - *decode_fabric_key
       - run:
