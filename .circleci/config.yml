@@ -230,7 +230,7 @@ jobs:
           command: gcloud config set project expand-recyclerview
       - run:
           name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+          command: gcloud auth activate-service-account firebase-adminsdk-al7v4@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
       - run:
           name: Run instrumented test on Firebase Test Lab
           command: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec --directories-to-pull=/sdcard/tmp --timeout 20m
@@ -257,7 +257,7 @@ jobs:
           command: gcloud config set project expand-recyclerview
       - run:
           name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+          command: gcloud auth activate-service-account firebase-adminsdk-al7v4@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
       - run:
           name: Run robo test on Firebase Test Lab
           command: gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --directories-to-pull=/sdcard/tmp
