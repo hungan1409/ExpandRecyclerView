@@ -143,9 +143,9 @@ jobs:
     steps:
       - checkout
       - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+        - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
       - *save_cache
       - *export_android_key
       - *decode_android_key
@@ -153,16 +153,16 @@ jobs:
       - *decode_gservices_key
       - *export_fabric_key
       - *decode_fabric_key
-      - run:
-          name: Gradle build (release)
-          command: ./gradlew -PciBuild=true :app:assembleRelease
+        - run:
+        name: Gradle build (release)
+        command: ./gradlew -PciBuild=true :app:assembleRelease
       - *persist_release_workspace
-      - store_artifacts:
-          path: app/build/outputs/apk/
-          destination: /apk/
-      - store_artifacts:
-          path: app/build/outputs/mapping/
-          destination: /mapping/
+        - store_artifacts:
+        path: app/build/outputs/apk/
+        destination: /apk/
+                       -   store_artifacts:
+        path: app/build/outputs/mapping/
+        destination: /mapping/
 
   ## Check code quality
   check_quality:
@@ -170,22 +170,22 @@ jobs:
     steps:
       - checkout
       - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+        - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
       - *save_cache
       - *export_gservices_key
       - *decode_gservices_key
-      - run:
-          name: Run Checkstyle
-          command: ./gradlew -PciBuild=true :app:customCheckstyle
-      - run:
-          name: Run FindBugs
-          command: ./gradlew -PciBuild=true :app:customFindBugs
+        - run:
+        name: Run Checkstyle
+        command: ./gradlew -PciBuild=true :app:customCheckstyle
+                   -   run:
+        name: Run FindBugs
+        command: ./gradlew -PciBuild=true :app:customFindBugs
       - *persist_debug_workspace
-      - store_artifacts:
-          path: app/build/reports/
-          destination: /reports/
+        - store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
 
   ## Run unit tests
   test_unit:
@@ -193,22 +193,22 @@ jobs:
     steps:
       - checkout
       - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+        - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
       - *save_cache
       - *export_gservices_key
       - *decode_gservices_key
-      - run:
-          name: Run unit tests
-          command: ./gradlew -PciBuild=true :app:testDebugUnitTest
+        - run:
+        name: Run unit tests
+        command: ./gradlew -PciBuild=true :app:testDebugUnitTest
       - *persist_debug_workspace
-      - store_artifacts:
-          path: app/build/reports/
-          destination: /reports/
-      - store_test_results:
-          path: app/build/test-results/
-          destination: /test-results/
+        - store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
+                       -   store_test_results:
+        path: app/build/test-results/
+        destination: /test-results/
 
   ## Run instrumented tests
   test_instrumented:
@@ -217,25 +217,25 @@ jobs:
       - *attach_debug_workspace
       - *export_gcloud_key
       - *decode_gcloud_key
-      - run:
-          name: Set Google Cloud target project
-          command: gcloud config set project expand-recyclerview
-      - run:
-          name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
-      - run:
-          name: Run instrumented test on Firebase Test Lab
-          command: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec --directories-to-pull=/sdcard/tmp --timeout 20m
-      - run:
-          name: Create directory to store test results
-          command: mkdir firebase
-      - run:
-          name: Download instrumented test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
+        - run:
+        name: Set Google Cloud target project
+        command: gcloud config set project expand-recyclerview
+                   -   run:
+        name: Authenticate with Google Cloud
+        command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+                   -   run:
+        name: Run instrumented test on Firebase Test Lab
+        command: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec --directories-to-pull=/sdcard/tmp --timeout 20m
+                   -   run:
+        name: Create directory to store test results
+        command: mkdir firebase
+                   -   run:
+        name: Download instrumented test results from Firebase Test Lab
+        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
       - *persist_firebase_workspace
-      - store_artifacts:
-          path: firebase/
-          destination: /firebase/
+        - store_artifacts:
+        path: firebase/
+        destination: /firebase/
 
   ## Run robo tests in fire base
   test_robo:
@@ -244,25 +244,25 @@ jobs:
       - *attach_debug_workspace
       - *export_gcloud_key
       - *decode_gcloud_key
-      - run:
-          name: Set Google Cloud target project
-          command: gcloud config set project expand-recyclerview
-      - run:
-          name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
-      - run:
-          name: Run robo test on Firebase Test Lab
-          command: gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --directories-to-pull=/sdcard/tmp
-      - run:
-          name: Create directory to store test results
-          command: mkdir firebase
-      - run:
-          name: Download robo test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
+        - run:
+        name: Set Google Cloud target project
+        command: gcloud config set project expand-recyclerview
+                   -   run:
+        name: Authenticate with Google Cloud
+        command: gcloud auth activate-service-account firebase-adminsdk-hsd8n@expand-recyclerview.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+                   -   run:
+        name: Run robo test on Firebase Test Lab
+        command: gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --directories-to-pull=/sdcard/tmp
+                   -   run:
+        name: Create directory to store test results
+        command: mkdir firebase
+                   -   run:
+        name: Download robo test results from Firebase Test Lab
+        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-da1w00qiz55zw-wjvifihjiw0t2 | tail -1`*" /root/workspace/firebase/
       - *persist_firebase_workspace
-      - store_artifacts:
-          path: firebase/
-          destination: /firebase/
+        - store_artifacts:
+        path: firebase/
+        destination: /firebase/
 
   ## Submit JaCoCo coverage report
   report_coverage:
@@ -270,28 +270,28 @@ jobs:
     steps:
       - checkout
       - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+        - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
       - *attach_debug_workspace
       - *attach_firebase_workspace
-      - run:
-          name: Move Firebase coverage report
-          command: mkdir -p app/build/outputs/code-coverage/connected && cp firebase/sailfish-26-en_US-portrait/artifacts/coverage.ec app/build/outputs/code-coverage/connected/coverage.ec
+        - run:
+        name: Move Firebase coverage report
+        command: mkdir -p app/build/outputs/code-coverage/connected && cp firebase/sailfish-26-en_US-portrait/artifacts/coverage.ec app/build/outputs/code-coverage/connected/coverage.ec
       - *export_gservices_key
       - *decode_gservices_key
-      - run:
-          name: Generate JaCoCo report
-          command: ./gradlew -PciBuild=true :app:jacocoTestReport
-      - run:
-          name: Upload coverage report to Codacy
-          command: ./gradlew -PciBuild=true uploadCoverageToCodacy
-      - run:
-          name: Upload coverage report to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
-      - store_artifacts:
-          path: app/build/reports/
-          destination: /reports/
+        - run:
+        name: Generate JaCoCo report
+        command: ./gradlew -PciBuild=true :app:jacocoTestReport
+                   -   run:
+        name: Upload coverage report to Codacy
+        command: ./gradlew -PciBuild=true uploadCoverageToCodacy
+                   -   run:
+        name: Upload coverage report to CodeCov
+        command: bash <(curl -s https://codecov.io/bash)
+                   -   store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
 
   ## Deploy release APK to Fabric Beta
   deploy:
@@ -300,44 +300,44 @@ jobs:
       - checkout
       - *attach_release_workspace
       - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+        - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
       - *export_fabric_key
       - *decode_fabric_key
-      - run:
-          name: Deploy to Fabric Beta
-          command: ./gradlew -PciBuild=true :app:crashlyticsUploadDistributionRelease
+        - run:
+        name: Deploy to Fabric Beta
+        command: ./gradlew -PciBuild=true :app:crashlyticsUploadDistributionRelease
 
 workflows:
   version: 2
   workflow:
     jobs:
       - build_debug
-#      - build_release
-#      - check_quality:
-#          requires:
-#            - build_debug
-#      - test_unit:
-#          requires:
-#            - build_debug
+      # - build_release
+      # - check_quality:
+      #     requires:
+      #       - build_debug
+      - test_unit:
+          requires:
+            - build_debug
       - test_instrumented:
           requires:
             - build_debug
-#      - test_robo:
-#          requires:
-#            - build_debug
-#        - report_coverage:
-#          requires:
-#            - test_unit
-#            - test_instrumented
-#        - deploy:
-#          filters:
-#            branches:
-#              only:
-#                - master
-#          requires:
-#            - build_release
-#            - check_quality
-#            - test_unit
-#            - test_instrumented
+      # - test_robo:
+      #     requires:
+      #       - build_debug
+      # - report_coverage:
+      #     requires:
+      #       - test_unit
+      #       - test_instrumented
+      # - deploy:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #     requires:
+      #       - build_release
+      #       - check_quality
+      #       - test_unit
+      #       - test_instrumented
